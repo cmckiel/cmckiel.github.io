@@ -173,7 +173,7 @@ int main(void)
 
 Read the code or not. It is just there for reference. But what's there is enough to get our wheels spinning. The full setup is depicted below, to include the 5.1K pull-up resistors to tie the lines high. I used that resistance value because I had it easily on hand. Anything from 2K-10K is common. There is a lot to consider when optimizing these values, and this isn't the post to get into it.
 
-![Microcontroller and Oscope Measuring I2C Bus](../assets/i2c_initial_testing.jpg)
+![Microcontroller and Oscope Measuring I2C Bus](/assets/i2c_initial_testing.jpg)
 > STM32F4 Dev Board in white. Raspberry Pi testing harness. Oscilloscope reads the I2C Bus.
 
 There it is. The first signs of life. This driver has hope. And it is far from done.
