@@ -35,6 +35,5 @@ The drone will fly up, spin, and land all by itself after you tell it to start. 
 
 ## Github Links
 
-[Circular Buffer](https://github.com/cmckiel/circular_buffer) : A circular buffer created for embedded environments exclusively with TDD.
-[HAL](https://github.com/cmckiel/hal) : A Hardware Abstraction Layer containing all the hardware drivers and interfaces that the drone software will build upon.
-
+- [Circular Buffer](https://github.com/cmckiel/circular_buffer) : A circular buffer created for embedded environments exclusively with TDD.
+- [HAL](https://github.com/cmckiel/hal) : A Hardware Abstraction Layer containing all the hardware drivers and interfaces that the drone software will build upon.
