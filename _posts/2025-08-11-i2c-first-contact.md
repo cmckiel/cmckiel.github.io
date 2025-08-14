@@ -4,7 +4,7 @@ title: "I2C First Contact"
 ---
 
 # I2C First Contact
-![](../assets/i2c_first_ack_from_imu.png)
+![](/assets/i2c_first_ack_from_imu.png)
 > First ack from the MPU 6050 gyroscope and accelerometer. Red vertical line marks ack on the 9th clock pulse confirmed by SDA (in green) pulled low.
 
 This past weekend I was able to make first contact with the IMU I'll be using for my drone from scratch project using my custom I2C driver. I just wanted to share a little about what I actually did and how.
@@ -13,7 +13,7 @@ In my last post, [I2C First Signs of Life](./2025-07-25-i2c-first-signs-of-life.
 ## Interrupt-Based I2C Driver
 I wrote six different attempts of an interrupt driven design that all ended up being tossed in the garbage before I ended up with this one (which I can entirely imagine throwing away too in the near future). I2C ended up being much more challenging for me than the UART driver. The core difficulty relied on managing the concept of state within a given I2C transaction. First, you request the hardware to generate a start condition on the bus, then wait for confirmation that the start signal was generated, then send an address, then wait for an acknowledge signal, and so on. During either an iteration of the main loop or an interrupt call I continually had to wrestle with the state. Why was this interrupt generated? Does it match what the current transaction was expecting? How much does the hardware keep track of and how much am I responsible for? I continually had to ask, what's going on and what should I do next? The six different attempts prior to this one each used progressively complex ways of keeping track of what is going on and calculating what should be done next in consequence. They were canned as their duplication became apparent, or their overhead too heavy, or their spaghetti knots too tangled, until at last, some semblance of simplicity emerged.
 
-![I2C State Machine](../assets/i2c_state_machine.png)
+![I2C State Machine](/assets/i2c_state_machine.png)
 > I2C Transmit State Machine. States in boxes. Events are arrows. Red boxes represent callbacks that perform operations based on the state change.
 
 It turns out that the hardware manages most of this for you if you let it. The I2C peripheral has its own state machine implemented in hardware that aids the programmer in the transaction. For the most part, it will call the interrupts at the right time in the right order. Even so, the main loop needs *some* idea of what's going on so it doesn't try to add a new message in the middle of the current transmission. My state that I needed to keep track of was reduced to one thing really, are we in the middle of a transmission, or not? If not, I can pop a message off the queue and load it into a place where the ISR can work on it in peace and set `_tx_in_progress = true`, then generate the `START CONDITION`, and away it goes. If a transmission is in progress, don't touch anything while the ISR works. This code runs in a `message_queue_servicer()` function in the main loop. My ISRs and the message servicer looked a little something like this:
@@ -142,7 +142,7 @@ With the Interrupt Driver Design at least somewhat in place, I absolutely *had* 
 ## First Contact
 Honestly, this part was surprisingly easy (comparatively). I just had to solder the headers onto my MPU 6050 and add it to the I2C bus on my bread board. I attached my logic analyzer to capture the communication. I used the reference manual to determine what address I should be sending to. I captured frames with both the correct address and incorrect address and noted the presence and absence of the ack signal respectively, until I felt very confident I was getting a positive acknowledgement from my IMU!
 
-![I2C First Contact Hardware Setup](../assets/i2c_first_contact_setup.jpg)
+![I2C First Contact Hardware Setup](/assets/i2c_first_contact_setup.jpg)
 > Hardware setup for this test. Please forgive the mess. Bread board with IMU in the center. STM32 Microcontroller in white. Logic Analyzer in red.
 
 ## Next Steps
