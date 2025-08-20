@@ -3,7 +3,7 @@ layout: post
 title: "I2C: Finding the Right Abstraction"
 ---
 # Finding the Right Abstraction
-![](../assets/imu_gyro_data.gif)
+![](/assets/imu_gyro_data.gif)
 > Gyroscope data coming from the MPU 6050 being printed out over UART. Logic analyzer capture of the I2C transaction in background. Development of this barebones MPU driver contributed significantly to the design of the I2C driver.
 
 I think often, the difficulties in our code mirror the difficulties in our thinking. Good code often springs from thinking about the problem in the right way and begins by recognizing the true elements and entities at play. Using an abstraction ultimately says, "I hold these properties relevant and applicable to the problem I am solving and any other properties I hold irrelevant." It is a decision one makes, to consider some things and not others, often with no more justification than a hypothesis.
@@ -57,5 +57,5 @@ HalStatus_t hal_i2c_transaction_servicer();
 ## A Worthy Goal
 All of these attempts were guided by the desire to accomplish a single goal. A benchmark of understanding that deeply excited me. I wanted to see live gyroscope data in my computer terminal. (As shown in the top of post). I wanted to shake my IMU and see the data go bananas as it tracks the angular velocities of my swings, rocks, and rolls. This single achievement would validate everything I have built thus far. The pursuit of this goal is what informed the design of my I2C driver. By actually attempting to build something on top and by actually *being* the client I discovered everything I disliked about the initial implementation. (And quickly). And build something, I did. I accomplished my goal and am grateful for the opportunity I had to learn more about I2C by *doing*.
 
-![Gyroscope Data Path](../assets/gyro_data_path.jpg)
+![Gyroscope Data Path](/assets/gyro_data_path.jpg)
 > The path of the gyroscope data as it moves from the MPU over I2C to the STM32F4, and from there over UART to the Raspberry Pi where the data can be viewed on the terminal by reading `/dev/ttyUSB0` using a tool like `screen`.
