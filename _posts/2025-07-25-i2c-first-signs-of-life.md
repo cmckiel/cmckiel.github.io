@@ -22,7 +22,7 @@ There are two main steps to initializing a polling based I2C driver:
 - Set up the I2C peripheral itself
 
 ### GPIO First
-```
+```C
 static void configure_gpio()
 {
     // Enable Bus.
@@ -60,7 +60,7 @@ If you happen to be wondering how someone would know to do most of these things,
 
 ### Peripheral Second
 
-```
+```C
 static void configure_peripheral()
 {
     // Send the clock to I2C1
@@ -112,7 +112,7 @@ With these steps now completed, it should be possible to use your I2C peripheral
 
 ## Using the I2C Peripheral
 
-```
+```C
 HalStatus_t hal_i2c_write(uint8_t slave_addr, const uint8_t *data, size_t len, size_t *bytes_written, uint32_t timeout_ms)
 {
     if (bytes_written) {
@@ -154,7 +154,7 @@ HalStatus_t hal_i2c_write(uint8_t slave_addr, const uint8_t *data, size_t len, s
 }
 ```
 
-```
+```C
 int main(void)
 {
 	size_t bytes_written_i2c = 0;

@@ -18,7 +18,7 @@ I wrote six different attempts of an interrupt driven design that all ended up b
 
 It turns out that the hardware manages most of this for you if you let it. The I2C peripheral has its own state machine implemented in hardware that aids the programmer in the transaction. For the most part, it will call the interrupts at the right time in the right order. Even so, the main loop needs *some* idea of what's going on so it doesn't try to add a new message in the middle of the current transmission. My state that I needed to keep track of was reduced to one thing really, are we in the middle of a transmission, or not? If not, I can pop a message off the queue and load it into a place where the ISR can work on it in peace and set `_tx_in_progress = true`, then generate the `START CONDITION`, and away it goes. If a transmission is in progress, don't touch anything while the ISR works. This code runs in a `message_queue_servicer()` function in the main loop. My ISRs and the message servicer looked a little something like this:
 
-```
+```C
 /* Private variables */
 static volatile uint8_t  _addr      = 0;
 static volatile uint8_t  _data[MAX_MESSAGE_DATA_LEN];
@@ -95,7 +95,7 @@ void I2C1_ER_IRQHandler()
 }
 ```
 
-```
+```C
 // Called from main loop
 HalStatus_t hal_i2c_message_servicer()
 {
