@@ -2,7 +2,7 @@
 layout: post
 title: "I2C: Finding the Right Abstraction"
 ---
-# Finding the Right Abstraction
+# I2C: Finding the Right Abstraction
 ![](/assets/imu_gyro_data.gif)
 > Gyroscope data coming from the MPU 6050 being printed out over UART. Logic analyzer capture of the I2C transaction in background. Development of this barebones MPU driver contributed significantly to the design of the I2C driver.
 
