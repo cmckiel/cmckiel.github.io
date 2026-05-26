@@ -15,7 +15,7 @@ Ultimately, as programmers, we must make what we think up. It must work function
 There are some who would establish design prior to development. The difficulty is, however, that your understanding of the problem is never worse than it is at the beginning. You haven't tested *any* of your initial thoughts. The trick with programming is that development *is* the design. The product *is* the specification. And the most effective path to quality software is to engage in the iterative process of incremental understanding by actually building what you've thought up and being prepared to completely change it.
 ## When Your First Idea Hits the Road, and it's Wrong
 The first abstraction I had in mind for the I2C driver was the byte, a carryover from my UART development. I imagined communicating over I2C was nothing more than sending and receiving bytes. This led to an interface like this:
-```C
+```c
 HalStatus_t hal_i2c_init(void *config);
 
 HalStatus_t hal_i2c_write(uint8_t device_addr, const uint8_t *data, size_t len, size_t *bytes_written, uint32_t timeout_ms);
@@ -30,7 +30,7 @@ The next abstraction I tried out was a message. The interface stayed the same, b
 
 ## The Right Abstraction
 Each of the attempts above were wrong but also necessary. Each taught me progressively more about I2C and the problem that I was solving. Each allowed me to test a hypothesis and get feedback. Eventually, I began to see I2C was not about sending bytes. The fundamental unit was not bytes or messages, but transactions, a series of bi-directional exchanges meant to accomplish a singular goal. Both parties had to actively participate perhaps many times during a single transaction. If I wanted my ISR to work quickly and silently in the background it needed a description of the entire transaction it was to perform, including the expected outcome. The second breakthrough was asking clients to maintain handles to their transactions. This way, clients can wait until their transaction is marked `COMPLETE` and then open it up to see the results. The driver never has to worry about who to send what. It simply works through the transactions it has been given, one at a time. This led to the following, much different, interface:
-```C
+```c
 typedef struct {
     // Immutable input. Can not change once transaction has been submitted.
     uint8_t target_addr;                     // The I2C address of the target device.
